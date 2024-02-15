@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo</title>
+</head>
+<body>
+    <div class="content">
+        <div class="header">
+            <h1 class="title">To-Do List</h1>
+        </div>
+        <div class="body">
+            <div class="menu">
+                <div class="projects-menu">
+                    <p class="project-list-title">Projects</p>
+                    <div class="project-list-container"></div>
+                    <dialog id="add-project-dialog">
+                        <form action="" class="add-project-form">
+                            <label for="project-title-input">Title</label>
+                            <input type="text" name="project_title" id="project-title-input">
+                            <div class="close-dialog">
+                                <button class="project-confirm" value="default">Confirm</button>
+                                <button class="project-cancel" value="default">Cancel</button>
+                            </div>
+                        </form>
+                    </dialog>
+                    <button class="project-show-dialog">Add Project</button>
+                </div>
+            </div>
+            <div class="project-tasks">
+                <dialog id="display-task-detail">
+                    <form action="" class="display-task-form">
+                        <div class="task-detail-title">
+                            <p class="task-detail-title-label task-label">Task: </p>
+                            <p class="task-detail-title-value task-value"></p>
+                        </div>
+                        <div class="task-detail-description">
+                            <p class="task-detail-description-label task-label">Description: </p>
+                            <p class="task-detail-description-value task-value"></p>
+                        </div>
+                        <div class="task-detail-due-date">
+                            <p class="task-detail-due-date-label task-label" >Due Date: </p>
+                            <p class="task-detail-due-date-value task-value"></p>
+                        </div>
+                        <div class="task-detail-priority">
+                            <p class="task-detail-priority-label task-label">Priority: </p>
+                            <p class="task-detail-priority-value task-value"></p>
+                        </div>
+                        <div class="task-detail-actions">
+                            <button type="button" class="edit-task-detail">Edit</button>
+                            <button type="button" class="cancel-task-detail">Cancel</button>
+                            <button type="button" class="delete-task">Delete</button>
+                        </div>
+                    </form>
+                </dialog>
+                <dialog id="add-task-dialog">
+                    <form action="" class="add-task-form">
+                        <label for="task-title-input">Title</label>
+                        <input type="text" name="task_title" id="task-title-input">
+
+                        <label for="task-description-input">Description</label>
+                        <textarea id="task-description-input" rows="10" cols="30"></textarea>
+
+                        <label for="task-due-date-input">Due Date</label>
+                        <input type="date" name="due_date" id="task-due-date-input">
+
+                        <label for="task-priority-input"></label>
+                        <select name="priority" id="task-priority-input">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                        <div class="close-dialog">
+                            <button class="task-confirm" value="default">Confirm</button>
+                            <button class="task-cancel" value="default">Cancel</button>
+                        </div>
+                    </form>
+                </dialog>
+                <button class="task-show-dialog">Add Task</button>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
