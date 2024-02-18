@@ -43,15 +43,23 @@
                         <div class="task-detail-due-date">
                             <p class="task-detail-due-date-label task-label" >Due Date: </p>
                             <p class="task-detail-due-date-value task-value"></p>
+                            <input type="date" name="due_date" class="task-detail-due-date-input task-value" style="display: none">
                         </div>
                         <div class="task-detail-priority">
                             <p class="task-detail-priority-label task-label">Priority: </p>
                             <p class="task-detail-priority-value task-value"></p>
+                            <select class="task-detail-priority-input task-value" style="display: none">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
                         </div>
                         <div class="task-detail-actions">
                             <button type="button" class="edit-task-detail">Edit</button>
                             <button type="button" class="cancel-task-detail">Cancel</button>
                             <button type="button" class="delete-task">Delete</button>
+                            <button type="button" class="confirm-edit" style="display: none">Confirm</button>
+                            <button type="button" class="cancel-edit" style="display: none">Cancel</button>
                         </div>
                     </form>
                 </dialog>

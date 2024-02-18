@@ -13,10 +13,6 @@ export function addTaskToProject(existingProject, newTask) {
     existingProject.addTask(newTask);
 }
 
-export function deleteTaskFromSelectedProject(index) {
-    selectedProject.deleteTask(index);
-}
-
 export function createProject(title) {
     return project(title);
 }
@@ -46,16 +42,20 @@ export function getTaskFromSelectedProject(index) {
     return selectedProject.getTask(index);
 }
 
+export function deleteTaskFromSelectedProject(index) {
+    selectedProject.deleteTask(index);
+}
+
 export function createDummyProjectsAndTasks() {
     const project1 = project('Work');
     const project2 = project('Chores');
 
-    const task1 = task('Polish Excel', 'Excel is messy, need to clean it up', '12/02/23', 'High');
+    const task1 = task('Polish Excel', 'Excel is messy, need to clean it up', '2023-02-03', 'High');
     const task2 = task('Train New Employee', 'New employee needs to be trained on programming', 
-                        '12/05/23', 'Medium');
-    const task3 = task('Do Laundry', 'Laundry basket is almost full', '12/04/23', 'Medium');
-    const task4 = task('Wash Dishes', 'Dishes are dirty', '12/04/23', 'High');
-    const task5 = task('Change Lightbulb', 'Lightbulb has been flickering for a few days', '12/17/23', 'Low');
+                        '2023-05-19', 'Medium');
+    const task3 = task('Do Laundry', 'Laundry basket is almost full', '2023-12-14', 'Medium');
+    const task4 = task('Wash Dishes', 'Dishes are dirty', '2023-10-07', 'High');
+    const task5 = task('Change Lightbulb', 'Lightbulb has been flickering for a few days', '2023-11-13', 'Low');
 
     project1.addTask(task1);
     project1.addTask(task2);

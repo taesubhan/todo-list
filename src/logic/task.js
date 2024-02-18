@@ -1,9 +1,9 @@
 function task(title, description, dueDate, priority) {
     let taskCompleted = false;
-    const editTitle = (newTitle) => title = newTitle;
-    const editDescription = (newDescription) => description = newDescription;
-    const editDueDate = (newDueDate) => dueDate = newDueDate;
-    const editPriority = (newPriority) => priority = newPriority;
+    // const editTitle = (newTitle) => title = newTitle;
+    // const editDescription = (newDescription) => description = newDescription;
+    // const editDueDate = (newDueDate) => dueDate = newDueDate;
+    // const editPriority = (newPriority) => priority = newPriority;
     const toggleCompleted = () => {
         todoCompleted 
             ? todoCompleted = false 
@@ -11,7 +11,7 @@ function task(title, description, dueDate, priority) {
     }
     const isTaskCompleted = () => taskCompleted;
     
-    return {title, description, dueDate, priority, editTitle, editDescription, editDueDate, editPriority, 
+    return {title, description, dueDate, priority, 
             toggleCompleted, isTaskCompleted};
 }
 
