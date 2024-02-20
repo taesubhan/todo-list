@@ -16,22 +16,39 @@ function getTaskDetailsButton(taskIndex) {
 }
 
 /* Display list of task */
+function createCheckbox(taskObj) {
+    const checkbox = document.createElement('input');
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.setAttribute('name', 'completed');
+    checkbox.classList.add('task-status-checkbox');
+
+    checkbox.checked = taskObj.isTaskCompleted();
+
+    checkbox.addEventListener('change', () => {
+        taskObj.setTaskStatus(checkbox.checked);
+    })
+
+    return checkbox;
+}
+
 function getTasksDOM(taskList) {
     const allTasksContainer = document.createElement('div');
 
     for (let i = 0; i < taskList.length; i++) {
+        const taskObj = taskList[i];
         const taskContainer = document.createElement('div');
         const taskUnorderedList = document.createElement('ul');
+        const checkbox = createCheckbox(taskObj);
         const taskDetailsButton = getTaskDetailsButton(i);
-        const taskObj = taskList[i];
-
+        
         taskContainer.classList.add('task-container');
         taskContainer.setAttribute('task-index', `${i}`);
 
+        taskContainer.appendChild(checkbox);
         taskContainer.appendChild(taskUnorderedList); 
         taskContainer.appendChild(taskDetailsButton);
-        // const properties = ['title', 'description', 'dueDate', 'priority'];
-        const properties = {title: 'title', description: 'description', dueDate: 'due-date', priority: 'priority'};
+
+        const properties = {title: 'title', dueDate: 'due-date'};
 
         for (let prop in properties) {
             const taskProperty = document.createElement('li');
@@ -43,26 +60,6 @@ function getTasksDOM(taskList) {
     }
     return allTasksContainer;
 }
-
-// function getProjectsDOM(projectList) {
-//     const allProjectsContainer = document.createElement('div');
-//     allProjectsContainer.classList.add('project-list');
-
-//     for (let proj of projectList) {
-//         const projectContainer = document.createElement('div');
-        
-//         const projectTitle = document.createElement('p');
-//         projectTitle.textContent = proj.title;
-//         projectContainer.appendChild(projectTitle);
-        
-//         const projectTasks = getTasksDOM(proj.getTaskList());
-//         projectContainer.appendChild(projectTasks); 
-        
-//         allProjectsContainer.appendChild(projectContainer);
-//     }
-
-//     return allProjectsContainer;
-// }
 
 function getProjectDOM(projectDOM) {
     if (projectDOM === null) {

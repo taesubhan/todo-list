@@ -5,14 +5,15 @@ function task(title, description, dueDate, priority) {
     // const editDueDate = (newDueDate) => dueDate = newDueDate;
     // const editPriority = (newPriority) => priority = newPriority;
     const toggleCompleted = () => {
-        todoCompleted 
-            ? todoCompleted = false 
-            : todoCompleted = true
+        taskCompleted
+            ? taskCompleted = false 
+            : taskCompleted = true
     }
     const isTaskCompleted = () => taskCompleted;
+    const setTaskStatus = (status) => taskCompleted = status;
+    const getTaskStatus = () => taskCompleted ? 'Completed' : 'Incomplete';
     
-    return {title, description, dueDate, priority, 
-            toggleCompleted, isTaskCompleted};
+    return {title, description, dueDate, priority, toggleCompleted, isTaskCompleted, setTaskStatus, getTaskStatus};
 }
 
 export {task};
