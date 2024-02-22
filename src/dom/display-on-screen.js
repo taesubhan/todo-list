@@ -1,5 +1,6 @@
 import * as todo from '../logic/todo-state.js';
 import {editAndOpenTaskDetailDialog} from './dialog-box.js';
+import {formatDate} from './dom-functions.js';
 
 const taskListDOM = document.querySelector('.project-tasks');
 
@@ -52,7 +53,11 @@ function getTasksDOM(taskList) {
 
         for (let prop in properties) {
             const taskProperty = document.createElement('li');
-            taskProperty.textContent = taskObj[`${prop}`];
+            if (prop === 'dueDate') {
+                taskProperty.textContent = formatDate(taskObj[prop]);
+            } else if (prop === 'title') {
+                taskProperty.textContent = taskObj[prop];
+            }
             taskProperty.classList.add('task-' + properties[`${prop}`]);
             taskUnorderedList.appendChild(taskProperty);
         }

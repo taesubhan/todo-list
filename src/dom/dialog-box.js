@@ -1,5 +1,6 @@
 import * as todo from '../logic/todo-state.js';
 import {updateDisplay} from './display-on-screen.js';
+import {formatDate} from './dom-functions.js';
 
 function makeTextElementsEditable(flag=true, ...elements) {
     elements.forEach((elem) => elem.setAttribute('contentEditable', flag ? 'true' : 'false'));
@@ -14,7 +15,7 @@ function makeDateEditable(flag=true, dueDate, dueDateInput, taskIndex) {
     if (flag) {
         dueDateInput.value = taskObj.dueDate;
     } else {
-        dueDate.textContent = taskObj.dueDate;
+        dueDate.textContent = formatDate(taskObj.dueDate);
     }
 }
 
@@ -175,7 +176,7 @@ export function editAndOpenTaskDetailDialog(taskIndex) {
     
     title.textContent = taskObj.title;
     description.textContent = taskObj.description;
-    dueDate.textContent = taskObj.dueDate;
+    dueDate.textContent = formatDate(taskObj.dueDate);
     priority.textContent = taskObj.priority;
     status.textContent = taskObj.getTaskStatus();
     statusInput.value = `${taskObj.isTaskCompleted()}`;
