@@ -1,16 +1,27 @@
-import {task} from './task.js';
-import {project} from './projects.js';
+import {task, taskFromJSON} from './task.js';
+import {project, projectFromJSON} from './projects.js';
 
-
-const projectList = [];
-let selectedProject = null;
-
-export function createTask(title, description, dueDate, priority) {
-    return task(title, description, dueDate, priority);
+/* Projects */ //remove export
+export function reviver(key, value) {
+    if (value.isProjectObj) {
+        return projectFromJSON(value);
+    } else if (value.isTaskObj) {
+        return taskFromJSON(value);
+    } else {
+        return value;
+    }
 }
 
-export function addTaskToProject(existingProject, newTask) {
-    existingProject.addTask(newTask);
+export function getProjectList() {
+    if (localStorage.getItem('projectList')) {
+        return JSON.parse(localStorage.getItem('projectList'), reviver);
+    } else {
+        return [];
+    }
+}
+
+function setProjectList(projList) {
+    localStorage.setItem('projectList', JSON.stringify(projList));
 }
 
 export function createProject(title) {
@@ -18,33 +29,77 @@ export function createProject(title) {
 }
 
 export function addProject(newProject) {
-    projectList.push(newProject);
+    const projects = getProjectList();
+    if (projects.map((proj) => proj.title).includes(newProject.title)) {
+        console.log('Prevent Addition Of Project');
+        return;
+    }
+    projects.push(newProject);
+    setProjectList(projects);
 }
 
 export function getProject(index) {
-    return projectList[index];
+    return getProjectList()[index];
 }
 
-export function getProjectList() {
-    return projectList;
+/* Tasks */
+
+export function createTask(title, description, dueDate, priority) {
+    return task(title, description, dueDate, priority);
 }
+
+export function addTaskToProject(existingProject, newTask) {
+    const projects = getProjectList();
+    const project = projects.find((proj) => proj === existingProject);
+    project.addTask(newTask);
+    setProjectList(projects);
+}
+
+export function getTaskStatus(taskObj) {
+    return taskObj.taskCompleted ? 'Completed' : 'Incomplete';
+}
+
+/* Selected Projects */
 
 export function getSelectedProject() {
-    return selectedProject;
+    return getProject(parseInt(localStorage.getItem('selectedProjectIndex')));
 }
 
-export function setSelectedProject(project) {
-    selectedProject = project;
-    // selectedProject = getProject(index);
+export function setNewSelectedProject(projectIndex) {
+    localStorage.setItem('selectedProjectIndex', projectIndex);
+}
+
+export function updateSelectedProject(projectObj) {
+    const index = parseInt(localStorage.getItem('selectedProjectIndex'));
+    const projectList = getProjectList();
+    projectList[index] = projectObj;
+    setProjectList(projectList);
 }
 
 export function getTaskFromSelectedProject(index) {
-    return selectedProject.getTask(index);
+    return getSelectedProject().getTask(index);
+}
+
+
+export function updateTaskFromSelectedProject(taskIndex, taskObj) {
+    const selectedProj = getSelectedProject();
+    selectedProj.setTask(taskIndex, taskObj);
+    updateSelectedProject(selectedProj);
+}
+
+export function addTaskToSelectedProject(taskObj) {
+    const selectedProj = getSelectedProject();
+    selectedProj.addTask(taskObj);
+    updateSelectedProject(selectedProj);
 }
 
 export function deleteTaskFromSelectedProject(index) {
-    selectedProject.deleteTask(index);
+    const selectedProj = getSelectedProject();
+    selectedProj.deleteTask(index);
+    updateSelectedProject(selectedProj);
 }
+
+/* Dummy Projects and Tasks */
 
 export function createDummyProjectsAndTasks() {
     const project1 = project('Work');
@@ -65,6 +120,7 @@ export function createDummyProjectsAndTasks() {
 
     addProject(project1);
     addProject(project2);
+
 }
 
 createDummyProjectsAndTasks();

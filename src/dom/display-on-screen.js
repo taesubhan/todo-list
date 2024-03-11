@@ -2,6 +2,7 @@ import * as todo from '../logic/todo-state.js';
 import {editAndOpenTaskDetailDialog} from './dialog-box.js';
 import {formatDate} from './dom-functions.js';
 
+
 const taskListDOM = document.querySelector('.project-tasks');
 
 function getTaskDetailsButton(taskIndex) {
@@ -11,22 +12,23 @@ function getTaskDetailsButton(taskIndex) {
     
     detailButton.addEventListener('click', (e) => {
         editAndOpenTaskDetailDialog(taskIndex);
-        // console.log(todo.getProjectList());
     })
     return detailButton;
 }
 
 /* Display list of task */
-function createCheckbox(taskObj) {
+function createCheckbox(taskIndex) {
+    const taskObj = todo.getTaskFromSelectedProject(taskIndex);
     const checkbox = document.createElement('input');
     checkbox.setAttribute('type', 'checkbox');
     checkbox.setAttribute('name', 'completed');
     checkbox.classList.add('task-status-checkbox');
-
-    checkbox.checked = taskObj.isTaskCompleted();
+    
+    checkbox.checked = taskObj.taskCompleted;
 
     checkbox.addEventListener('change', () => {
-        taskObj.setTaskStatus(checkbox.checked);
+        taskObj.taskCompleted = checkbox.checked;
+        todo.updateTaskFromSelectedProject(taskIndex, taskObj);
     })
 
     return checkbox;
@@ -39,7 +41,7 @@ function getTasksDOM(taskList) {
         const taskObj = taskList[i];
         const taskContainer = document.createElement('div');
         const taskUnorderedList = document.createElement('ul');
-        const checkbox = createCheckbox(taskObj);
+        const checkbox = createCheckbox(i);
         const taskDetailsButton = getTaskDetailsButton(i);
         
         taskContainer.classList.add('task-container');
@@ -67,7 +69,7 @@ function getTasksDOM(taskList) {
 }
 
 function getProjectDOM(projectDOM) {
-    if (projectDOM === null) {
+    if (!projectDOM) {
         const emptyProjectContainer = document.createElement('div');
         emptyProjectContainer.classList.add('project-container');
         return emptyProjectContainer;
@@ -92,6 +94,7 @@ function displayTaskList() {
 }
 
 /* Delete and update task display */
+
 function deleteTaskDisplay() {
     const projectContainer = document.querySelector('.project-container');
     taskListDOM.removeChild(projectContainer);
@@ -120,9 +123,8 @@ function displayProjectsOnMenu() {
         projectItem.setAttribute('projectIndex', `${i}`);
         projectItem.textContent = proj.title;
         projectItem.addEventListener('click', () => {
-            todo.setSelectedProject(proj);
+            todo.setNewSelectedProject(i);
             updateDisplay();
-            // console.log(todo.selectedProject);
         });
         projectListItem.appendChild(projectItem);
     }

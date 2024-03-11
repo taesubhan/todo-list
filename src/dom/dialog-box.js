@@ -39,9 +39,9 @@ function makeStatusEditable(flag=true, status, statusInput, taskIndex) {
     const taskObj = todo.getTaskFromSelectedProject(taskIndex);
 
     if (flag) {
-        statusInput.textContent = taskObj.getTaskStatus();
+        statusInput.textContent = todo.getTaskStatus(taskObj);
     } else {
-        status.textContent = taskObj.getTaskStatus();
+        status.textContent = todo.getTaskStatus(taskObj);
     }
 }
 
@@ -60,7 +60,7 @@ function revertEditChanges(title, description, dueDateInput, priorityInput, stat
     description.textContent = currentTask.description;
     dueDateInput.value = currentTask.dueDate;
     priorityInput.value = currentTask.priority;
-    statusInput.textContent = currentTask.getTaskStatus();
+    statusInput.textContent = todo.getTaskStatus(currentTask);
 }
 
 function getTaskIndex(formElement) {
@@ -88,7 +88,6 @@ function addTaskDetailDialogButtons() {
     const priorityInput = document.querySelector('.task-detail-priority-input');
     const statusInput = document.querySelector('.task-detail-status-input');
     
-
     deleteButton.addEventListener('click', (e) => {
         const taskIndex = getTaskIndex(taskForm);
         todo.deleteTaskFromSelectedProject(taskIndex);
@@ -128,13 +127,15 @@ function addTaskDetailDialogButtons() {
 
     confirmEditButton.addEventListener('click', () => {
         const taskIndex = getTaskIndex(taskForm);
-        const task = todo.getTaskFromSelectedProject(taskIndex);
+        const taskObj = todo.getTaskFromSelectedProject(taskIndex);
 
-        task.title = title.textContent;
-        task.description = description.textContent;
-        task.dueDate = dueDateInput.value;
-        task.priority = priorityInput.value;
-        task.setTaskStatus(statusInput.value === 'true' ? true : false);
+        taskObj.title = title.textContent;
+        taskObj.description = description.textContent;
+        taskObj.dueDate = dueDateInput.value;
+        taskObj.priority = priorityInput.value;
+        taskObj.taskCompleted = statusInput.value === 'true' ? true : false;
+        
+        todo.updateTaskFromSelectedProject(taskIndex, taskObj);
 
         makeTextElementsEditable(false, title, description);
         makeDateEditable(false, dueDate, dueDateInput, taskIndex);
@@ -148,15 +149,8 @@ function addTaskDetailDialogButtons() {
     })
 
     statusInput.addEventListener('click', () => {
-        const taskIndex = getTaskIndex(taskForm);
-        const task = todo.getTaskFromSelectedProject(taskIndex);
-//FIX THIS!
-
-        // const val = !statusInput.value;
-        // statusInput.value = false; 
         statusInput.value = statusInput.value === 'true' ? 'false' : 'true';
         statusInput.textContent = statusInput.value === 'true' ? 'Completed' : 'Incomplete';
-
     })
 }
 
@@ -178,9 +172,8 @@ export function editAndOpenTaskDetailDialog(taskIndex) {
     description.textContent = taskObj.description;
     dueDate.textContent = formatDate(taskObj.dueDate);
     priority.textContent = taskObj.priority;
-    status.textContent = taskObj.getTaskStatus();
-    statusInput.value = `${taskObj.isTaskCompleted()}`;
-
+    status.textContent = todo.getTaskStatus(taskObj);
+    statusInput.value = `${taskObj.taskCompleted}`;
     dialogBox.showModal();
 }
 
@@ -206,7 +199,7 @@ function addCreatingTaskDialog() {
             dialogBox.close();
 
             const newTask = todo.createTask(titleInput.value, descriptionInput.value, dueDateInput.value, priorityInput.value);
-            todo.addTaskToProject(todo.getSelectedProject(), newTask);
+            todo.addTaskToSelectedProject(newTask);
             updateDisplay();
         }
     })
@@ -236,7 +229,6 @@ function addCreatingProjectDialog() {
 
             const newProject = todo.createProject(projectInput.value);
             todo.addProject(newProject);
-            console.log(newProject);
             updateDisplay();
         }
     });
