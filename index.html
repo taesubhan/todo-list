@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo</title>
-<script defer src="main4d7b1087fe3c7354b523.js"></script></head>
+<script defer src="mainc62c60a08c4b3743a927.js"></script></head>
 <body>
     <div class="content">
         <div class="header">
@@ -17,44 +17,49 @@
                     <p class="project-list-title">Projects</p>
                     <div class="project-list-container"></div>
                     <dialog id="add-project-dialog">
-                        <form action="" class="add-project-form">
-                            <label for="project-title-input">Title</label>
-                            <input type="text" name="project_title" id="project-title-input">
-                            <div class="close-dialog">
-                                <button class="project-confirm" value="default">Confirm</button>
-                                <button class="project-cancel" value="default">Cancel</button>
-                            </div>
-                        </form>
+                        <div class="add-project-container">
+                            <h2 class="add-project-dialog-header">Add Project</h2>
+                            <form action="" class="add-project-form">
+                                <div class="project-title-input-container">
+                                    <label for="project-title-input">Project Name<span class="required">*</span>  </label>
+                                    <input type="text" name="project_title" id="project-title-input" class="editable" required>
+                                </div>
+                                <div class="close-dialog">
+                                    <button class="project-confirm" value="default">Confirm</button>
+                                    <button class="project-cancel" value="default">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
                     </dialog>
-                    <button class="project-show-dialog">Add Project</button>
+                    <button class="project-show-dialog">+ Add Project</button>
                 </div>
             </div>
             <div class="project-tasks">
                 <dialog id="display-task-detail">
                     <form action="" class="display-task-form">
-                        <div class="task-detail-title">
+                        <div class="task-detail-title task-detail-property">
                             <p class="task-detail-title-label task-label">Task: </p>
                             <p class="task-detail-title-value task-value"></p>
                         </div>
-                        <div class="task-detail-description">
+                        <div class="task-detail-description task-detail-property">
                             <p class="task-detail-description-label task-label">Description: </p>
                             <p class="task-detail-description-value task-value"></p>
                         </div>
-                        <div class="task-detail-due-date">
+                        <div class="task-detail-due-date task-detail-property">
                             <p class="task-detail-due-date-label task-label" >Due Date: </p>
                             <p class="task-detail-due-date-value task-value"></p>
-                            <input type="date" name="due_date" class="task-detail-due-date-input task-value" style="display: none">
+                            <input type="date" name="due_date" class="task-detail-due-date-input task-value editable" style="display: none">
                         </div>
-                        <div class="task-detail-priority">
+                        <div class="task-detail-priority task-detail-property">
                             <p class="task-detail-priority-label task-label">Priority: </p>
                             <p class="task-detail-priority-value task-value"></p>
-                            <select class="task-detail-priority-input task-value" style="display: none">
+                            <select class="task-detail-priority-input task-value editable" style="display: none">
                                 <option value="Low">Low</option>
                                 <option value="Medium">Medium</option>
                                 <option value="High">High</option>
                             </select>
                         </div>
-                        <div class="task-detail-status">
+                        <div class="task-detail-status task-detail-property">
                             <p class="task-detail-status-label task-label">Status: </p>
                             <p class="task-detail-status-value task-value"></p>
                             <button type="button" class="task-detail-status-input task-value" style="display: none"></button>
@@ -69,29 +74,31 @@
                     </form>
                 </dialog>
                 <dialog id="add-task-dialog">
-                    <form action="" class="add-task-form">
-                        <label for="task-title-input">Title</label>
-                        <input type="text" name="task_title" id="task-title-input">
-
-                        <label for="task-description-input">Description</label>
-                        <textarea id="task-description-input" rows="10" cols="30"></textarea>
-
-                        <label for="task-due-date-input">Due Date</label>
-                        <input type="date" name="due_date" id="task-due-date-input">
-
-                        <label for="task-priority-input"></label>
-                        <select name="priority" id="task-priority-input">
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                        </select>
-                        <div class="close-dialog">
-                            <button class="task-confirm" value="default">Confirm</button>
-                            <button class="task-cancel" value="default">Cancel</button>
-                        </div>
-                    </form>
+                    <div class="add-task-dialog-container">
+                        <h2 class="add-task-dialog-header">Add Task</h2>
+                        <form action="" class="add-task-form">
+                            <div class="user-task-inputs">
+                                <label for="task-title-input" class="add-task-label">Title<span class="required">*</span></label>
+                                <input type="text" name="task_title" id="task-title-input" class="add-task-input-box editable" required>
+                                <label for="task-description-input" class="add-task-label">Description</label>
+                                <textarea id="task-description-input" rows="10" cols="30" class="add-task-input-box editable"></textarea>
+                                <label for="task-due-date-input" class="add-task-label">Due Date<span class="required">*</span></label>
+                                <input type="date" name="due_date" id="task-due-date-input" class="add-task-input-box editable" required>
+                                <label for="task-priority-input" class="add-task-label">Priority<span class="required">*</span></label>
+                                <select name="priority" id="task-priority-input" class="add-task-input-box editable" required>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                            <div class="close-dialog">
+                                <button class="task-confirm" value="default">Confirm</button>
+                                <button class="task-cancel" value="default">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </dialog>
-                <button class="task-show-dialog">Add Task</button>
+                <button class="task-show-dialog">+ Add Task</button>
             </div>
         </div>
     </div>
