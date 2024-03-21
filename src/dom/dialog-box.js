@@ -3,7 +3,10 @@ import {updateDisplay} from './display-on-screen.js';
 import {formatDate} from './dom-functions.js';
 
 function makeTextElementsEditable(flag=true, ...elements) {
-    elements.forEach((elem) => elem.setAttribute('contentEditable', flag ? 'true' : 'false'));
+    elements.forEach((elem) => {
+        elem.setAttribute('contentEditable', flag ? 'true' : 'false');
+        elem.classList.toggle('editable', flag);
+    })
 }
 
 function makeDateEditable(flag=true, dueDate, dueDateInput, taskIndex) {
@@ -244,6 +247,5 @@ function addDialogButtonActions() {
     addCreatingProjectDialog();
     addTaskDetailDialogButtons();
 }
-
 
 export {addDialogButtonActions};

@@ -1,0 +1,5 @@
+[] Add CSS to fully flesh out the app
+[] Add feature to delete projects
+[] Add delete button for each task on the home page
+[] Make the projects highlighted when clicked on
+[] Add Time menu options 

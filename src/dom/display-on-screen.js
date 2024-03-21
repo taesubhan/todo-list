@@ -17,6 +17,7 @@ function getTaskDetailsButton(taskIndex) {
 }
 
 /* Display list of task */
+
 function createCheckbox(taskIndex) {
     const taskObj = todo.getTaskFromSelectedProject(taskIndex);
     const checkbox = document.createElement('input');
@@ -36,6 +37,7 @@ function createCheckbox(taskIndex) {
 
 function getTasksDOM(taskList) {
     const allTasksContainer = document.createElement('div');
+    allTasksContainer.classList.add('task-list');
 
     for (let i = 0; i < taskList.length; i++) {
         const taskObj = taskList[i];
@@ -45,6 +47,7 @@ function getTasksDOM(taskList) {
         const taskDetailsButton = getTaskDetailsButton(i);
         
         taskContainer.classList.add('task-container');
+        taskUnorderedList.classList.add('task-properties')
         taskContainer.setAttribute('task-index', `${i}`);
 
         taskContainer.appendChild(checkbox);
@@ -79,6 +82,7 @@ function getProjectDOM(projectDOM) {
     projectContainer.classList.add('project-container');
     
     const projectTitle = document.createElement('p');
+    projectTitle.classList.add('project-for-task-list');
     projectTitle.textContent = projectDOM.title;
     projectContainer.appendChild(projectTitle);
     
@@ -111,6 +115,11 @@ function replaceSpaces(text) {
     return text.trim().replace(' ', '-');
 }
 
+function removeSelectedClassForAll() {
+    const menuOptions = document.querySelector('.menu li');
+    
+}
+
 function displayProjectsOnMenu() {
     const menu = document.querySelector('.project-list-container');
     const projectListItem = document.createElement('ul');
@@ -124,6 +133,7 @@ function displayProjectsOnMenu() {
         projectItem.textContent = proj.title;
         projectItem.addEventListener('click', () => {
             todo.setNewSelectedProject(i);
+            projectItem.classList.add('selected-project');
             updateDisplay();
         });
         projectListItem.appendChild(projectItem);
