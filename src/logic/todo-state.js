@@ -1,5 +1,6 @@
 import {task, taskFromJSON} from './task.js';
 import {project, projectFromJSON} from './projects.js';
+import {format} from 'date-fns';
 
 /* Projects */ //remove export
 export function reviver(key, value) {
@@ -20,6 +21,11 @@ export function getProjectList() {
     }
 }
 
+export function getProjectNames() {
+    const projectList = getProjectList();
+    return projectList.map((project) => project.title);
+}
+
 function setProjectList(projList) {
     localStorage.setItem('projectList', JSON.stringify(projList));
 }
@@ -31,7 +37,6 @@ export function createProject(title) {
 export function addProject(newProject) {
     const projects = getProjectList();
     if (projects.map((proj) => proj.title).includes(newProject.title)) {
-        console.log('Prevent Addition Of Project');
         return;
     }
     projects.push(newProject);
@@ -42,16 +47,30 @@ export function getProject(index) {
     return getProjectList()[index];
 }
 
+function deleteProject(index) {
+    const projects = getProjectList();
+    if (index < projects.length) {
+        projects.splice(index, 1);
+        setProjectList(projects);
+    }
+}
+
 /* Tasks */
 
 export function createTask(title, description, dueDate, priority) {
     return task(title, description, dueDate, priority);
 }
 
-export function addTaskToProject(existingProject, newTask) {
+// export function addTaskToProject(existingProject, newTask) {
+//     const projects = getProjectList();
+//     const project = projects.find((proj) => proj === existingProject);
+//     project.addTask(newTask);
+//     setProjectList(projects);
+// }
+
+export function addTaskToProject(projIndex, taskObj) {
     const projects = getProjectList();
-    const project = projects.find((proj) => proj === existingProject);
-    project.addTask(newTask);
+    projects[projIndex].addTask(taskObj);
     setProjectList(projects);
 }
 
@@ -59,13 +78,42 @@ export function getTaskStatus(taskObj) {
     return taskObj.taskCompleted ? 'Completed' : 'Incomplete';
 }
 
+export function getTaskFromIndex(projIndex, taskIndex) {
+    return getProjectList()[projIndex].getTaskList()[taskIndex];
+}
+
+export function updateTaskFromIndex(projIndex, taskIndex, taskObj) {
+    const projectList = getProjectList();
+    projectList[projIndex].setTask(taskIndex, taskObj);
+    setProjectList(projectList);
+}
+
+export function deleteTaskFromIndex(projIndex, taskIndex) {
+    const project = getProject(projIndex);
+    project.deleteTask(taskIndex);
+    updateSelectedProject(project);
+}
+
 /* Selected Projects */
 
+export function getSelectedMenuCategory() {
+    return localStorage.getItem('selectedMenuCategory');
+}
+
+export function setSelectedMenuCategory(menuCategory) {
+    localStorage.setItem('selectedMenuCategory', menuCategory);
+}
+
+export function getSelectedProjectIndex() {
+    return parseInt(localStorage.getItem('selectedProjectIndex'));
+}
+
 export function getSelectedProject() {
-    return getProject(parseInt(localStorage.getItem('selectedProjectIndex')));
+    return getProject(getSelectedProjectIndex());
 }
 
 export function setNewSelectedProject(projectIndex) {
+    setSelectedMenuCategory('projects');
     localStorage.setItem('selectedProjectIndex', projectIndex);
 }
 
@@ -76,10 +124,20 @@ export function updateSelectedProject(projectObj) {
     setProjectList(projectList);
 }
 
+export function deleteSelectedProject() {
+    const currentProjectIndex = parseInt(localStorage.getItem('selectedProjectIndex'));
+    deleteProject(currentProjectIndex);
+}
+
+export function editSelectedProjectName(newName) {
+    const selectedProject = getSelectedProject();
+    selectedProject.title = newName;
+    updateSelectedProject(selectedProject);
+}
+
 export function getTaskFromSelectedProject(index) {
     return getSelectedProject().getTask(index);
 }
-
 
 export function updateTaskFromSelectedProject(taskIndex, taskObj) {
     const selectedProj = getSelectedProject();
@@ -98,6 +156,42 @@ export function deleteTaskFromSelectedProject(index) {
     selectedProj.deleteTask(index);
     updateSelectedProject(selectedProj);
 }
+
+/* Date */
+
+function getToday() {
+    const dateFormat = 'yyyy-MM-dd';
+    const date = new Date();
+    return format(date, dateFormat);
+}
+
+export function getTasksDueToday() {
+    const taskToday = [];
+    const projectList = getProjectList();
+    for (let p = 0; p < projectList.length; p++) {
+        const taskList = projectList[p].getTaskList();
+        for (let t = 0; t < taskList.length; t++) {
+            if (taskList[t].dueDate === getToday()){
+                taskToday.push({
+                    'projectIndex': p,
+                    'taskIndex': t
+                })
+            }
+        }
+    }
+
+    return taskToday;
+}
+
+export function getProjectIndex(item) {
+    return item['projectIndex'];
+}
+
+export function getTaskIndex(item) {
+    return item['taskIndex'];
+}
+
+
 
 /* Dummy Projects and Tasks */
 

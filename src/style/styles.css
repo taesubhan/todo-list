@@ -14,11 +14,18 @@
     --dialog-font-size: 16px;
     --dialog-input-box-height: 30px;
     --dialog-description-box-height: calc(var(--dialog-input-box-height) * 4);
+    --dialog-close-button-width: 40px;
+    --dialog-box-padding: 20px;
     /* Colors */
     --main-theme-color: #8b5cf6;
     --secondary-theme-color: #ede9fe;
     --add-button-color: #8b5cf6;
     --add-button-font-color: white;
+    --detail-button-color: ;
+    --confirm-button-color: #dcfce7;
+    --cancel-button-color: #fecaca;
+    --delete-button-color: #ef4444;
+    /* --detail-button */
 }
 
 html {
@@ -66,6 +73,11 @@ li {
     border: 1px solid black;
 }
 
+.clickable:hover
+, button:hover {
+    cursor: pointer;
+}
+
 /************************/
 
 
@@ -76,8 +88,6 @@ li {
 
 
 .header {
-    /* border-bottom: black solid 1px; */
-    /* padding: 30px; */
     grid-column: 1 / 3;
     height: 100%;
     display: flex;
@@ -106,8 +116,6 @@ li {
 .body {
     display: grid;
     grid-template-columns: 300px 1fr;
-    
-    /* padding: 30px; */
     margin: 0px;
 
 }
@@ -122,22 +130,26 @@ li {
     box-shadow: 4px 0 2px -2px rgba(0, 0, 0, 0.2);
 }
 
+.menu-sub-container,
+.project-show-dialog {
+    margin-left: 20px;
+}
+
 .menu li:hover,
 .menu li:focus {
     cursor: pointer;
 }
 
-.project-list-title {
+.menu-header {
     font-size: var(--section-header-size);
     font-weight: bold;
     margin: 0px;
     margin-bottom: 20px;
 }
 
-.projects-menu {
-    /* display: grid; */
-    /* grid-template-columns: 1fr; */
-    /* row-gap: 30px; */
+.currently-selected-menu-item {
+    background-color: rgba(0, 0, 0, 0.2);
+    
 }
 
 .project-list-container {
@@ -147,12 +159,13 @@ li {
 .project-list-menu {
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 10px;
     margin: 0px;
 }
 
-.project-title {
+.menu-sub-header{
     font-size: var(--project-task-size);
+    border-radius: 5px;
+    padding: 5px;
 }
 
 .project-show-dialog {
@@ -169,6 +182,17 @@ li {
 
 /* Tasklist */
 
+.project-action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.project-action-buttons *:hover {
+    cursor: pointer;
+}
+
 .task-show-dialog {
     height: 40px;
     width: 150px;
@@ -178,7 +202,11 @@ li {
     color: var(--add-button-font-color);
 }
 
-.project-for-task-list {
+.project-settings {
+    width: 50px;
+}
+
+.task-list-body-title {
     font-size: var(--section-header-size);
     text-decoration: underline;
     margin: 30px 0px;
@@ -206,9 +234,7 @@ li {
     gap: 20px;
     height: 60px;
     padding: 0px 20px;
-    /* border: black solid 1px; */
     border-bottom: #d1d5db solid 1px;
-    /* border-radius: var(--task-container-border-radius); */
     font-size: var(--content-font-size);
 }
 
@@ -220,18 +246,46 @@ li {
 
 .task-properties {
     display: grid;
-    grid-template-columns: 250px 200px;
+    grid-template-columns: 250px 150px 75px;
+    gap: 50px;
 }
 
 .task-due-date {
-    margin-left: 100px;
+    /* margin-left: 100px; */
+}
+
+.task-actions-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.task-details,
+.delete-task-front-end {
+    height: 40px;
+    width: 60px;
+    border-radius: var(--task-container-border-radius);
 }
 
 .task-details {
-    height: 40px;
-    width: 60px;
-    margin-left: auto;
-    border-radius: var(--task-container-border-radius);
+    background-color: var(--secondary-theme-color);
+}
+
+.delete-task-front-end {
+    background-color: var(--delete-button-color);
+    color: white;
+}
+
+[priority-level='low'] {
+    color: #fde047;
+}
+
+[priority-level='medium'] {
+    color: #fb923c;
+}
+
+[priority-level='high'] {
+    color: #dc2626;
 }
 
 
@@ -249,6 +303,7 @@ li {
 #add-project-dialog {
     width: 480px;
     height: 280px;
+    padding: var(--dialog-box-padding);
     border-radius: var(--dialog-border-radius);
 }
 
@@ -300,6 +355,14 @@ input#project-title-input {
     border-radius: 5px;
 }
 
+.project-confirm {
+    background-color: var(--confirm-button-color);
+}
+
+.project-cancel {
+    background-color: var(--cancel-button-color);
+}
+
 /**/
 
 /* Add Task */
@@ -307,6 +370,7 @@ input#project-title-input {
 #add-task-dialog {
     width: 500px;
     height: 500px;
+    padding: var(--dialog-box-padding);
     border-radius: var(--dialog-border-radius);
 }
 
@@ -354,21 +418,27 @@ input#project-title-input {
     border-radius: 5px;
 }
 
+.task-confirm {
+    background-color: var(--confirm-button-color);
+}
+
+.task-cancel {
+    background-color: var(--cancel-button-color);
+}
+
 /**/
 
 /* Task Details */
 
 #display-task-detail {
     width: 500px;
-    height: 420px;
+    max-height: 80vh;
+    padding: var(--dialog-box-padding);
     border-radius: var(--dialog-border-radius);
+    position: relative;
 }
 
 .display-task-form {
-    /* display: grid;
-    grid-template-columns: 1fr;
-    grid-auto-rows: 1fr;
-    row-gap: 0px; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -380,7 +450,6 @@ input#project-title-input {
 .display-task-form p {
     margin: 0px;
     padding: 2px;
-    /* border: 1px black solid; */
 }
 
 .task-detail-property {
@@ -398,15 +467,130 @@ input#project-title-input {
 .task-detail-actions {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 80px;
 }
 
 .task-detail-actions button {
     width: var(--dialog-button-width);
     height: var(--dialog-button-height);
+    /* height: 300px; */
     font-size: var(--dialog-font-size);
     border-radius: 5px;
     margin-top: 10px;
+}
+
+.edit-task-detail {
+    background-color: var(--main-theme-color);
+    color: white;
+}
+
+.delete-task {
+    background-color: var(--delete-button-color);
+    color: white;
+}
+
+.confirm-edit {
+    background-color: var(--confirm-button-color);
+}
+
+.cancel-edit {
+    background-color: var(--cancel-button-color);
+}
+
+/* Applies to project settings too */
+.close-button {
+    width: var(--dialog-close-button-width);
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+/**/
+
+/* Project Settings */
+
+#project-settings {
+    width: 380px;
+    min-height: 220px;
+    padding: var(--dialog-box-padding);
+    border-radius: var(--dialog-border-radius);    
+    position: relative;
+}
+
+.project-settings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.project-settings-title {
+    margin: 20px 0;
+    font-size: var(--section-header-size);
+}
+
+.project-settings-actions {
+    display: flex;
+    gap: 20px;
+}
+
+.edit-project-name,
+.delete-project {
+    width: var(--dialog-button-width);
+    height: var(--dialog-button-height);
+    font-size: var(--dialog-font-size);
+    border-radius: 5px;
+    color: white;
+}
+
+.edit-project-name {
+    background-color: var(--main-theme-color);
+}
+
+.delete-project {
+    background-color: var(--delete-button-color);
+}
+
+/**/
+
+/* Project Settings - Edit Name */
+
+.edit-project-name-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.edit-project-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.confirm-new-project-name,
+.cancel-new-project-name {
+    width: var(--dialog-button-width);
+    height: var(--dialog-button-height);
+    font-size: var(--dialog-font-size);
+    border-radius: 5px;
+}
+
+.confirm-new-project-name {
+    background-color: var(--confirm-button-color);
+}
+
+.cancel-new-project-name {
+    background-color: var(--cancel-button-color);
+}
+
+.project-name-edit-input,
+#new-project-name {
+    font-size: var(--dialog-font-size);
+}
+
+#new-project-name {
+    height: var(--dialog-description-box-height);
+    height: var(--dialog-input-box-height);
 }
 
 /**/

@@ -5,3 +5,9 @@ export function formatDate(text) {
     const [year, month, day] = text.split('-');
     return format(new Date(year, month - 1, day), dateFormat);
 } 
+
+export function deleteAllChildren(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}

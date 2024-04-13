@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo</title>
-<script defer src="mainc62c60a08c4b3743a927.js"></script></head>
+<script defer src="main797c2cb6308f4729f12b.js"></script></head>
 <body>
     <div class="content">
         <div class="header">
@@ -13,9 +13,13 @@
         </div>
         <div class="body">
             <div class="menu">
+                <div class="tasks-by-period-menu">
+                    <p class="task-period-list-title menu-header">Tasks By Date</p>
+                    <div class="task-period-list-container menu-sub-container"></div>
+                </div>
                 <div class="projects-menu">
-                    <p class="project-list-title">Projects</p>
-                    <div class="project-list-container"></div>
+                    <p class="project-list-title menu-header">Projects</p>
+                    <div class="project-list-container menu-sub-container"></div>
                     <dialog id="add-project-dialog">
                         <div class="add-project-container">
                             <h2 class="add-project-dialog-header">Add Project</h2>
@@ -37,6 +41,7 @@
             <div class="project-tasks">
                 <dialog id="display-task-detail">
                     <form action="" class="display-task-form">
+                        <div class="close-task-detail"></div>
                         <div class="task-detail-title task-detail-property">
                             <p class="task-detail-title-label task-label">Task: </p>
                             <p class="task-detail-title-value task-value"></p>
@@ -66,7 +71,6 @@
                         </div>
                         <div class="task-detail-actions">
                             <button type="button" class="edit-task-detail">Edit</button>
-                            <button type="button" class="cancel-task-detail">Cancel</button>
                             <button type="button" class="delete-task">Delete</button>
                             <button type="button" class="confirm-edit" style="display: none">Confirm</button>
                             <button type="button" class="cancel-edit" style="display: none">Cancel</button>
@@ -98,7 +102,29 @@
                         </form>
                     </div>
                 </dialog>
-                <button class="task-show-dialog">+ Add Task</button>
+                <dialog id="project-settings">
+                    <div class="project-settings-container">
+                        <h2 class="project-settings-title">Project Settings</h2>
+                        <div class="project-settings-actions">
+                            <button class="edit-project-name">Edit Name</button>
+                            <button class="delete-project">Delete</button>
+                        </div>
+                        <div class="edit-project-name-inputs" style="display: none">
+                            <div class="project-name-edit-input">
+                                <label for="new-project-name">Project Name: </label>
+                                <input type="text" id="new-project-name" name="new_project_name" class="editable">
+                            </div>
+                            <div class="edit-project-buttons">
+                                <button class="confirm-new-project-name">Confirm</button>
+                                <button class="cancel-new-project-name">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </dialog>
+                <div class="project-action-buttons">
+                    <button class="task-show-dialog">+ Add Task</button>
+                </div>
+                <div class="project-container"></div>
             </div>
         </div>
     </div>

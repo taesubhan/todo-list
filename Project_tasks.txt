@@ -1,5 +1,7 @@
-[] Add CSS to fully flesh out the app
-[] Add feature to delete projects
-[] Add delete button for each task on the home page
-[] Make the projects highlighted when clicked on
+[x] Add CSS to fully flesh out the app
+[x] Add feature to delete projects
+[x] Add delete button for each task on the home page
+[x] Allow project name to be edited
+[x] Make the projects highlighted when clicked on
 [] Add Time menu options 
+[x] Add color representation of status
