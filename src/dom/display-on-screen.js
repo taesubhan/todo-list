@@ -1,13 +1,11 @@
-import { project } from '../logic/projects.js';
 import * as todo from '../logic/todo-state.js';
 import {editAndOpenTaskDetailDialog, displayProjectSettingsDialog} from './dialog-box.js';
 import {formatDate, deleteAllChildren} from './dom-functions.js';
 import cogIcon from '../images/icons/cog.svg';
 
-const taskListDOM = document.querySelector('.project-tasks');
+/**** Buttons ****/
 
-/* Buttons */
-
+// Add a cog icon at the top right of the screen to represent the project settings
 function addProjectSettingsIcon() {
     const settingsIcon = new Image();
     settingsIcon.src = cogIcon;
@@ -20,15 +18,18 @@ function addProjectSettingsIcon() {
     projectActions.appendChild(settingsIcon);
 }
 
+// Creates buttons for the webpage
 function createButtons() {
     addProjectSettingsIcon();
 }
 
+// Removes the project settings button (cog icon) from webpage
 function deleteButtons() {
     const settingsIcon = document.querySelector('.project-settings');
     settingsIcon ? settingsIcon.remove() : null;
 }
 
+// Returns a button that opens a task detail dialog box. Added to each task record
 function getTaskDetailsButton(projIndex, taskIndex) {
     const detailButton = document.createElement('button');
     detailButton.classList.add('task-details');
@@ -37,11 +38,13 @@ function getTaskDetailsButton(projIndex, taskIndex) {
     detailButton.addEventListener('click', (e) => {
         editAndOpenTaskDetailDialog(projIndex, taskIndex);
     })
+
     return detailButton;
 }
 
-/* Display list of task */
+/**** Display list of task ****/
 
+// Creates a clickable checkbox object that represents the completion of a task
 function createCheckbox(projIndex, taskIndex) {
     const taskObj = todo.getTaskFromIndex(projIndex, taskIndex);
     const checkbox = document.createElement('input');
@@ -59,6 +62,7 @@ function createCheckbox(projIndex, taskIndex) {
     return checkbox;
 }
 
+// Creates a button that will delete the task object from the local storage
 function createDeleteButton(projIndex, taskIndex) {
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
@@ -71,6 +75,7 @@ function createDeleteButton(projIndex, taskIndex) {
     return deleteButton;
 }
 
+// Returns a DOM object that contains the list of tasks based on projects or date. Used for main content of page
 function getTasksDOM(taskList) {
     const allTasksContainer = document.createElement('div');
     allTasksContainer.classList.add('task-list');
@@ -132,6 +137,7 @@ function getTasksDOM(taskList) {
     return allTasksContainer;
 }
 
+// Returns a DOM that includes the project or other menu category name and the list of tasks that is under them
 function createProjectDOM(projectDOM) {
     if (!projectDOM) {
         const emptyProjectContainer = document.createElement('div');
@@ -139,8 +145,6 @@ function createProjectDOM(projectDOM) {
         return emptyProjectContainer;
     }
 
-    // const projectContainer = document.createElement('div');
-    // projectContainer.classList.add('project-container');
     const projectContainer = document.querySelector('.project-container');
     
     const projectTitle = document.createElement('p');
@@ -150,10 +154,9 @@ function createProjectDOM(projectDOM) {
     
     const projectTasks = getTasksDOM(projectDOM.getTaskList());
     projectContainer.appendChild(projectTasks); 
-
-    // return projectContainer;
 }
 
+// Populates the list of tasks on the main webpage depending on menu selection (e.g. any projects, "Today")
 function displayTaskList() {  
     const selectedMenu = todo.getSelectedMenuCategory();
 
@@ -166,29 +169,17 @@ function displayTaskList() {
     }
 }
 
-/* Delete and update task display */
-
+// Deletes the list of task on webpage
 function deleteTaskDisplay() {
     const projectContainer = document.querySelector('.project-container');
     deleteAllChildren(projectContainer);
 }
 
-/* Display list of projects in menu */
-
-function replaceSpaces(text) {
-    return text.trim().replaceAll(' ', '-');
-}
-
-/* Display tasks due today */
-
-
+// Displays list of tasks due today
 function createTodayDOM(taskList) {
     const projectContainer = document.querySelector('.project-container');
-    // const periodContainer = document.createElement('div');
-    // periodContainer.classList.add('period-container');
 
     if (Array.isArray(taskList) && !taskList.length) {
-        // return periodContainer;
         return;
     }
 
@@ -200,14 +191,11 @@ function createTodayDOM(taskList) {
     const todayTasks = getTasksDOM(taskList);
     projectContainer.appendChild(todayTasks);
 
-    // return periodContainer;
 }
 
-// function displayTodayTaskList() {
-//     const taskTodayDOM = getTodayDOM(todo.getTasksDueToday());
-//     taskListDOM.appendChild(taskTodayDOM);
-// }
+/**** Menu ****/
 
+// Displays the list of period related menu options on the Menu board (e.g. Today)
 function displayPeriodsOnMenu() {
     const taskPeriodMenu = document.querySelector('.task-period-list-container');
     const periodList = document.createElement('ul');
@@ -234,13 +222,18 @@ function displayPeriodsOnMenu() {
     taskPeriodMenu.appendChild(periodList);
 }
 
+// Deletes the period options on the menu board
 function deletePeriodsOnMenu() {
     const taskPeriodMenu = document.querySelector('.task-period-list-container');
     deleteAllChildren(taskPeriodMenu);
 }
 
-/* Display Projects on Menu */
+// Replaces any space in text with a dash
+function replaceSpaces(text) {
+    return text.trim().replaceAll(' ', '-');
+}
 
+// Displays all the projects on the menu board and clicking on them displays the respective task list
 function displayProjectsOnMenu() {
     const menu = document.querySelector('.project-list-container');
     const projectListItem = document.createElement('ul');
@@ -259,7 +252,6 @@ function displayProjectsOnMenu() {
         projectItem.textContent = proj.title;
         projectItem.addEventListener('click', () => {
             todo.setNewSelectedProject(i);
-            // projectItem.classList.add('selected-project');
             updateDisplay();
         });
         projectListItem.appendChild(projectItem);
@@ -268,13 +260,15 @@ function displayProjectsOnMenu() {
     menu.appendChild(projectListItem);
 }
 
+// Delete all the projects on the menu board
 function deleteProjectsOnMenuDisplay() {
     const projectsMenu = document.querySelector('.project-list-container');
     deleteAllChildren(projectsMenu);
 }
 
-/* Update for all data on the webpage */
+/**** Webpage Display ****/
 
+// Displays all the contents onto the webpage
 function displayAll() {
     displayTaskList();
     createButtons();
@@ -282,6 +276,7 @@ function displayAll() {
     displayPeriodsOnMenu();
 }
 
+// Deletes all the contents from the webpage
 function deleteAll() {
     deleteTaskDisplay();
     deleteButtons();
@@ -289,6 +284,7 @@ function deleteAll() {
     deletePeriodsOnMenu()
 }
 
+// Refreshes all the contents on the webpage
 function updateDisplay() {
     deleteAll();
     displayAll();

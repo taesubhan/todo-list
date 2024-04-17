@@ -3,6 +3,9 @@ import {updateDisplay} from './display-on-screen.js';
 import {formatDate} from './dom-functions.js';
 import closeIcon from '../images/icons/close.svg';
 
+/****  ****/
+
+// Makes the text element either editable or non-editable depending on the flag argument
 function makeTextElementsEditable(flag=true, ...elements) {
     elements.forEach((elem) => {
         elem.setAttribute('contentEditable', flag ? 'true' : 'false');
@@ -10,6 +13,7 @@ function makeTextElementsEditable(flag=true, ...elements) {
     })
 }
 
+// Makes the date element either editable or non-editable depending on the flag argument
 function makeDateEditable(flag=true, dueDate, dueDateInput, projIndex, taskIndex) {
     dueDate.style.display = flag ? 'none' : '';
     dueDateInput.style.display = flag ? '' : 'none';
@@ -23,6 +27,7 @@ function makeDateEditable(flag=true, dueDate, dueDateInput, projIndex, taskIndex
     }
 }
 
+// Makes the priority element either editable or non-editable depending on the flag argument
 function makePriorityEditable(flag=true, priority, priorityInput, projIndex, taskIndex) {
     priority.style.display = flag ? 'none' : '';
     priorityInput.style.display = flag ? '' : 'none';
@@ -36,6 +41,7 @@ function makePriorityEditable(flag=true, priority, priorityInput, projIndex, tas
     }
 }
 
+// Makes the status element either editable or non-editable depending on the flag argument
 function makeStatusEditable(flag=true, status, statusInput, projIndex, taskIndex) {
     status.style.display = flag ? 'none' : '';
     statusInput.style.display = flag ? '' : 'none';
@@ -49,14 +55,17 @@ function makeStatusEditable(flag=true, status, statusInput, projIndex, taskIndex
     }
 }
 
+// Hide elements so they can't be seen on the webpage
 function hideElements(...elements) {
     elements.forEach((elem) => elem.style.display = 'none');
 }
 
+// Reveal hidden elements so they can be seen on the webpage
 function showElements(...elements) {
     elements.forEach((elem) => elem.style.display = '');
 }
 
+// Repopulates the given elements with the values from the local storage. Any values already tied to the elements will therefore be wiped out
 function revertEditChanges(title, description, dueDateInput, priorityInput, statusInput, projIndex, taskIndex) {
     const currentTask = todo.getTaskFromIndex(projIndex, taskIndex);
 
@@ -67,14 +76,17 @@ function revertEditChanges(title, description, dueDateInput, priorityInput, stat
     statusInput.textContent = todo.getTaskStatus(currentTask);
 }
 
+// Returns the task index stored from the form element. This index was set by the function editAndOpenTaskDetailDialog()
 function getTaskIndex(formElement) {
     return parseInt(formElement.getAttribute('task-index'));
 }
 
+// Returns the project index stored from the form element. This index was set by the function editAndOpenTaskDetailDialog()
 function getProjectIndex(formElement) {
     return parseInt(formElement.getAttribute('project-index'));
 }
 
+// Returns the close (x) icon to exit out of the task detail dialog box
 function createExitTaskDetailButton() {
     const closeButtonIcon = new Image();
     closeButtonIcon.src = closeIcon;
@@ -83,6 +95,7 @@ function createExitTaskDetailButton() {
     return closeButtonIcon;
 }
 
+// Add event listeners to buttons within the task detail dialog
 function addTaskDetailDialogButtons() {
     const dialogBox = document.querySelector('#display-task-detail');
     const taskForm = document.querySelector('.display-task-form');
@@ -120,6 +133,7 @@ function addTaskDetailDialogButtons() {
     })
     closeButtonContainer.appendChild(closeButtonIcon);
 
+    // Changes all the properties of the task to be editable after the "Edit" button is clicked on
     function makeDialogEditable(editFlag=true, projIndex, taskIndex) {        
         makeTextElementsEditable(editFlag, title, description);
         makeDateEditable(editFlag, dueDate, dueDateInput, projIndex, taskIndex);
@@ -136,7 +150,6 @@ function addTaskDetailDialogButtons() {
             hideElements(...editActions);
             showElements(...detailActions); 
         }
-        
     }
 
     editButton.addEventListener('click', () => {
@@ -168,18 +181,17 @@ function addTaskDetailDialogButtons() {
         todo.updateTaskFromIndex(projIndex, taskIndex, taskObj);
         makeDialogEditable(false, projIndex, taskIndex);
 
-        // e.preventDefault();
-        // dialogBox.close();
-
         updateDisplay();
     })
 
+    // Toggle the status of a task by clicking on this button
     statusInput.addEventListener('click', () => {
         statusInput.value = statusInput.value === 'true' ? 'false' : 'true';
         statusInput.textContent = statusInput.value === 'true' ? 'Completed' : 'Incomplete';
     })
 }
 
+// Opens the task detail dialog box 
 export function editAndOpenTaskDetailDialog(projIndex, taskIndex) {
     const dialogBox = document.querySelector('#display-task-detail');
     const taskForm = document.querySelector('.display-task-form');
@@ -204,6 +216,7 @@ export function editAndOpenTaskDetailDialog(projIndex, taskIndex) {
     dialogBox.showModal();
 }
 
+// Create a dropdown that allows users to pick from a list of already existing projects. Used to define where a newly added task goes to when they are not selecting a project menu option
 function createProjectSelectionLabelAndDropDown() {
     const projectSelectionLabel = document.createElement('label');
     const requiredSign = document.createElement('span');
@@ -232,6 +245,7 @@ function createProjectSelectionLabelAndDropDown() {
     return [projectSelectionLabel, projectSelection];
 }
 
+// Deletes all projects from the project drop down in the "Add Task" dialog box
 function removeProjectSelection() {
     const projSelectionObjs = document.querySelectorAll('.exist-only-for-tasks-by-date');
     if (projSelectionObjs) {
@@ -239,6 +253,7 @@ function removeProjectSelection() {
     }
 }
 
+// Returns the project array index that is attributed to the project dropdown selection
 function retrieveProjectIndex(projectSelection) {
     const menu = todo.getSelectedMenuCategory();
     if (menu === 'tasksByDate') {
@@ -248,6 +263,7 @@ function retrieveProjectIndex(projectSelection) {
     }
 }
 
+// Creates a dialog box that is used to create a new task object
 function addCreatingTaskDialog() {
     const dialogBox = document.querySelector('#add-task-dialog');
     const taskForm = document.querySelector('.add-task-form');
@@ -303,6 +319,7 @@ function addCreatingTaskDialog() {
     });
 }
 
+// Creates a dialog box that is used to create a new project object
 function addCreatingProjectDialog() {
     const dialogBox = document.querySelector('#add-project-dialog');
     const projectForm = document.querySelector('.add-project-form');
@@ -332,16 +349,19 @@ function addCreatingProjectDialog() {
     })
 }
 
+// Opens dialog box that displays project settings
 export function displayProjectSettingsDialog() {
     const projectSettingsDialog = document.querySelector('#project-settings');
     projectSettingsDialog.showModal();
 }
 
+// Closes the dialog box that contains project settings
 function closeProjectSettingsDialog() {
     const projectSettingsDialog = document.querySelector('#project-settings');
     projectSettingsDialog.close();
 }
 
+// Adds the "x" icon used to close the project settings dialog box
 function addProjectSettingsCloseButton() {
     const closeButton = new Image();
     closeButton.src = closeIcon;
@@ -356,6 +376,7 @@ function addProjectSettingsCloseButton() {
     projectSettings.insertBefore(closeButton, projectSettings.firstChild);
 }
 
+// Adds event listener to a button to delete the designated project on click. 
 function activateDeleteProjectButton() {
     const deleteButton = document.querySelector('.delete-project');
     deleteButton.addEventListener('click', () => {
@@ -365,6 +386,7 @@ function activateDeleteProjectButton() {
     })
 }
 
+// Displays the buttons, on the project settings dialog box, that manipulate the project (e.g. edit name, delete)
 function displayProjectSettingsButtons() {
     const editProjectBox = document.querySelector('.edit-project-name-inputs');
     editProjectBox.style.display = 'none';
@@ -372,6 +394,7 @@ function displayProjectSettingsButtons() {
     projectSettingBox.style.display = '';
 }
 
+// Displays the input, on the project settings dialog box, that changes the project name 
 function displayProjectNameChangeInput() {
     const editProjectBox = document.querySelector('.edit-project-name-inputs');
     editProjectBox.style.display = '';
@@ -379,6 +402,7 @@ function displayProjectNameChangeInput() {
     projectSettingBox.style.display = 'none';
 }
 
+// Changes the project settings dialog box to allow users to edit the project name
 function activateEditProjectFeatures() {
     const dialogBox = document.querySelector('#project-settings');
     const input = document.querySelector('#new-project-name');
@@ -399,6 +423,7 @@ function activateEditProjectFeatures() {
     })
 }
 
+// Adds event listener to button to display the project name change input
 function activateEditProjectButton() {
     const editButton = document.querySelector('.edit-project-name');
     editButton.addEventListener('click', () => {
@@ -406,14 +431,15 @@ function activateEditProjectButton() {
     })
 }
 
+// Prepares the project settings dialog box by adding necessary icons, buttons, event listeners, etc.
 function addProjectSettings() {
-    // addProjectSettingsIcon();
     addProjectSettingsCloseButton();
     activateDeleteProjectButton();
     activateEditProjectButton(); 
-    activateEditProjectFeatures()
+    activateEditProjectFeatures();
 }
 
+// Creates all the dialog boxes into the DOM
 function addDialogButtonActions() {
     addCreatingTaskDialog();
     addCreatingProjectDialog();
